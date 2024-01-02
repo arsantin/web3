@@ -2,7 +2,6 @@
 "use client";
 
 import Head from "next/head";
-import Image from "next/image";
 import { doLogin } from "../services/web3-config";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
