@@ -1,11 +1,12 @@
 import Web3 from "web3";
 import abi from "./abi.json";
 
-const CONTRACT_ADDRESS = "0xf126da0859c6F00bA3dBcDE7e8b14CF3Ae998221";
+const CONTRACT_ADDRESS = "0x8A033CBb7eF4f743A5f10D76d83BDc8D0605D5b3";
 
 export async function doLogin() {
   if (!window.ethereum) throw new Error("Metamask não instalada");
   const web3 = new Web3(window.ethereum);
+
   const accounts = await web3.eth.requestAccounts();
   if (!accounts || !accounts.length)
     throw new Error("Carteira não encontrada ou permitida!");
@@ -40,6 +41,7 @@ export async function doLogin() {
 export async function getContract() {
   if (!window.ethereum) throw new Error("Metamask não encontrada");
   const web3 = new Web3(window.ethereum);
+  console.log(web3);
   const from = localStorage.getItem("wallet");
   console.log("rodou getContract", abi, CONTRACT_ADDRESS, { from });
   return new web3.eth.Contract(abi, CONTRACT_ADDRESS, { from });
@@ -50,9 +52,14 @@ export async function addTweet(text) {
   return contract.methods.addTweet(text).send();
 }
 
-export async function changeUsername(newName) {
+export async function get_message() {
   const contract = await getContract();
-  return contract.methods.changeUsername(newName).send();
+  return contract.methods.get_message().call;
+}
+
+export async function changeMessage(newName) {
+  const contract = await getContract();
+  return contract.methods.changeMessage(newName).send();
 }
 
 export async function getLastTweets(page) {

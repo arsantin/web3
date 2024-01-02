@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Head from "next/head";
@@ -17,10 +18,11 @@ export default function Home() {
 
   useEffect(() => {
     const wallet = localStorage.getItem("wallet");
+    alert(wallet);
     if (wallet) {
       push("/timeline");
     }
-  }, []);
+  }, [push]);
   return (
     <>
       <Head>
@@ -31,7 +33,7 @@ export default function Home() {
       <main>
         <h1>Crypto!!!!</h1>
         <button onClick={connectWallet}>
-          <Image
+          <img
             src="/connect-metamask.png"
             width={300}
             height={50}
