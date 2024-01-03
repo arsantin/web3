@@ -1,6 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-
 import Head from "next/head";
 import { doLogin } from "../services/web3-config";
 import { useRouter } from "next/navigation";
@@ -11,13 +9,12 @@ export default function Home() {
 
   function connectWallet() {
     doLogin()
-      .then((wallet) => push("/timeline"))
-      .catch((err) => console.error(err));
+      .then(() => push("/timeline"))
+      .catch((err: any) => console.error(err));
   }
 
   useEffect(() => {
     const wallet = localStorage.getItem("wallet");
-    alert(wallet);
     if (wallet) {
       push("/timeline");
     }

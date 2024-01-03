@@ -1,6 +1,5 @@
 import Web3 from "web3";
 import abi from "./abi.json";
-
 const CONTRACT_ADDRESS = "0x8A033CBb7eF4f743A5f10D76d83BDc8D0605D5b3";
 
 export async function doLogin() {
@@ -55,6 +54,14 @@ export async function addTweet(text) {
 export async function get_message() {
   const contract = await getContract();
   return contract.methods.get_message().call;
+}
+
+export async function get_balance() {
+  const web3 = new Web3(window.ethereum);
+  const accounts = await web3.eth.requestAccounts();
+  return web3.eth
+    .getBalance(accounts[0])
+    .then((res) => web3.utils.fromWei(res, "ether"));
 }
 
 export async function changeMessage(newName) {
