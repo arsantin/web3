@@ -1,4 +1,6 @@
 import Web3 from "web3";
+import toast from "react-hot-toast";
+
 import abi from "./abi.json";
 const CONTRACT_ADDRESS = "0x8A033CBb7eF4f743A5f10D76d83BDc8D0605D5b3";
 
@@ -52,8 +54,25 @@ export async function addTweet(text) {
 }
 
 export async function get_message() {
-  const contract = await getContract();
-  return contract.methods.get_message().call;
+  const contractMessage = await getContract();
+  return contractMessage.methods.get_message().call();
+}
+
+export async function sendTransfer() {
+  const walletFrom = localStorage.getItem("wallet");
+  const web3 = new Web3(window.ethereum);
+
+  // using the callback
+  await web3.eth
+    .sendTransaction({
+      from: walletFrom,
+      to: "0xBbBA97e686900ba326DD467325b44610DeB99F8E",
+      value: Web3.utils.toWei("0.0000000000000000000001", "ether"),
+      gas: "21000",
+    })
+    .then((resp) => {
+      resp;
+    });
 }
 
 export async function get_balance() {

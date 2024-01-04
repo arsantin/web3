@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
 import { doLogin } from "../services/web3-config";
@@ -9,7 +10,9 @@ export default function Home() {
 
   function connectWallet() {
     doLogin()
-      .then(() => push("/timeline"))
+      .then(() => {
+        push("/timeline");
+      })
       .catch((err: any) => console.error(err));
   }
 

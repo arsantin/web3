@@ -3,11 +3,15 @@ import {
   changeMessage,
   get_balance,
   get_message,
+  sendTransfer,
 } from "@/services/web3-config";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const Timeline = () => {
+  const [wallet, setWallet] = useState("");
+  const [payment, setPayment] = useState("");
   const [message, setMessage] = useState("");
   const [balance, setBalance] = useState("");
   const [username, setUsername] = useState<string>("");
@@ -17,13 +21,15 @@ const Timeline = () => {
   };
 
   function enviaNome() {
-    alert(username);
-    changeMessage(username)
-      .then((result) => {
-        console.log("result", result);
-        setMessage("contrato alterado!");
-      })
-      .catch((e) => console.log(e));
+    changeMessage(username).then((result) => {
+      toast.success("contrato alterado!");
+    });
+  }
+
+  function enviaPgto() {
+    const res: any = sendTransfer().then((x) => {
+      console.log("pagamento realizado!", x);
+    });
   }
 
   function getMessage() {
@@ -32,11 +38,13 @@ const Timeline = () => {
   }
 
   function getBalance() {
-    const message: any = get_balance();
-    setBalance(message);
+    const balance: any = get_balance();
+    setBalance(balance);
   }
 
   useEffect(() => {
+    const wallet: any = localStorage.getItem("wallet");
+    setWallet(wallet);
     void getBalance();
     void getMessage();
   }, []);
@@ -60,7 +68,7 @@ const Timeline = () => {
           }}
         >
           <h3>Carteira</h3>
-          <p>carteira conectada: xxxxxxxxxxxxxxxxxxxxxx</p>
+          <p>carteira conectada: {wallet}</p>
           <div className="saldo">seu saldo é de {balance}</div>
         </div>
 
@@ -74,24 +82,64 @@ const Timeline = () => {
           }}
         >
           <h3>Mensagem atual do contrato</h3>
-          <p>{message}</p>
-          <div className="mensagem">{message}</div>
+          <p>
+            <i>{message}</i>
+          </p>
+          <label htmlFor="tweet">Novo texto: </label>
+          <input
+            type="text"
+            onChange={(e: any) => pegaNome(e)}
+            name="tweet"
+            id=""
+          />
+          <button onClick={enviaNome}>ENVIAR NOVA MENSAGEM</button>
+        </div>
+        <div
+          className="card"
+          style={{
+            border: "solid 1px #DDD",
+            borderRadius: "8px",
+            padding: "15px",
+            margin: "20px",
+          }}
+        >
+          <h3>Fazer transferência:</h3>
+          <label htmlFor="tweet">Endereço do receptor:</label>
+          <input
+            type="text"
+            //   onChange={(e: any) => pegaNome(e)}
+            name="tweet"
+            placeholder="endereço da carteira"
+            id=""
+          />
+          <input
+            type="number"
+            //   onChange={(e: any) => pegaNome(e)}
+            name="tweet"
+            placeholder="valor a ser tranferido"
+            id=""
+          />
+          pgto:{payment}
+          <button onClick={enviaPgto}>TRANSFERIR</button>
         </div>
       </div>
-      <button onClick={getMessage}>GET MESSAGE</button>
-      <h1>{message}</h1>
-      <hr />
-      <label htmlFor="tweet">Novo texto: </label>
-      <input
-        type="text"
-        onChange={(e: any) => pegaNome(e)}
-        name="tweet"
-        id=""
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            style: {
+              background: "#3399ff",
+              color: "#fff",
+            },
+          },
+          error: {
+            style: {
+              background: "#ff0023",
+              color: "#fff",
+            },
+          },
+        }}
       />
-      <hr />
-      <button onClick={enviaNome}>ENVIAR NOVA MENSAGEM</button>
-      <h2></h2>
-      <></>
     </>
   );
 };
