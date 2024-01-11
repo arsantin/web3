@@ -1,5 +1,4 @@
 import Web3 from "web3";
-import toast from "react-hot-toast";
 
 import abi from "./abi.json";
 const CONTRACT_ADDRESS = "0x8A033CBb7eF4f743A5f10D76d83BDc8D0605D5b3";
